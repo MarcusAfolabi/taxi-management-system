@@ -1,66 +1,231 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Here’s a comprehensive README.md file that walks through the installation and implementation process from setting up the Laravel backend with JWT and WebSocket to integrating the Flutter app with JWT authentication and real-time updates.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+# Car Management System with Microservice Architecture, JWT Authentication, and Real-Time Updates
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This project is a full-stack application built with Laravel and Flutter that implements JWT-based authentication, WebSocket for real-time updates, and a microservice-inspired architecture. Users can register, login, and perform CRUD operations on cars, with real-time notifications available for certain actions.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
+1. [Features](#features)
+2. [Technologies Used](#technologies-used)
+3. [Installation](#installation)
+4. [Backend (Laravel) Setup](#backend-laravel-setup)
+5. [Frontend (Flutter) Setup](#frontend-flutter-setup)
+6. [Running the Application](#running-the-application)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Features
+- **User Authentication**: Secure user login and registration with JWT.
+- **Car Management**: CRUD operations for car entities.
+- **Real-Time Notifications**: Receive live updates when a car entity is added, modified, or deleted.
+- **Microservice-Inspired Architecture**: Decouples user authentication and car management functionalities.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Technologies Used
+- **Backend**: Laravel (PHP)
+- **Frontend**: Flutter (Dart)
+- **Authentication**: JSON Web Tokens (JWT)
+- **Real-Time Notifications**: WebSocket using Pusher and Laravel Echo
+- **Database**: MySQL (or any preferred database)
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+### Prerequisites
+- [Composer](https://getcomposer.org/) (for PHP dependencies)
+- [Node.js](https://nodejs.org/) and npm (for Laravel Echo)
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (for the mobile app)
+- [Pusher Account](https://pusher.com/) (for WebSocket functionality)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Backend (Laravel) Setup
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/car-management-system.git
+cd car-management-system/backend
+```
+2. Install Dependencies
+```bash 
+composer install
+npm install
+```
+3. Environment Configuration
+Copy .env.example to .env and update your database, Pusher, and JWT settings:
+```bash
+cp .env.example .env
+```
 
-## Contributing
+Update .env with your configuration:
+```bash
+DB_DATABASE=your_database_name
+DB_USERNAME=your_database_user
+DB_PASSWORD=your_database_password
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+PUSHER_APP_ID=your_pusher_app_id
+PUSHER_APP_KEY=your_pusher_app_key
+PUSHER_APP_SECRET=your_pusher_app_secret
+PUSHER_APP_CLUSTER=your_pusher_app_cluster
 
-## Code of Conduct
+JWT_SECRET=your_jwt_secret
+```
+4. Generate Keys and Run Migrations
+```bash
+php artisan key:generate
+php artisan jwt:secret
+php artisan migrate
+```
+5. Start Laravel Server
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. Setting Up WebSocket with Pusher
+In config/broadcasting.php, set the default broadcast driver to Pusher:
 
-## Security Vulnerabilities
+```php
+'default' => env('BROADCAST_DRIVER', 'pusher'),
+```
+In resources/js/bootstrap.js, import Laravel Echo and initialize Pusher:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```javascript
+import Echo from 'laravel-echo';
+window.Pusher = require('pusher-js');
 
-## License
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: process.env.MIX_PUSHER_APP_KEY,
+    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    forceTLS: true
+});
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Then, compile assets:
+
+```bash
+npm run dev
+```
+
+
+Frontend (Flutter) Setup
+1. Navigate to Flutter Project Directory
+
+```bash
+cd ../frontend
+```
+
+2. Install Flutter Dependencies
+Run the following command to install required packages:
+
+```bash
+flutter pub get
+```
+3. Secure Storage and HTTP Setup
+Install flutter_secure_storage for storing JWT tokens and http for API requests in your pubspec.yaml:
+
+```yaml
+dependencies:
+  flutter_secure_storage: ^5.0.2
+  http: ^0.13.3
+  pusher_client: ^1.2.0
+```
+4. API Communication with JWT
+Login and Fetch JWT Token
+Add a login function to store the JWT token securely:
+
+```dart
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+final storage = FlutterSecureStorage();
+
+Future<void> login(String email, String password) async {
+  final response = await http.post(
+    Uri.parse('https://your-api.com/api/v1/auth/login'),
+    body: {'email': email, 'password': password},
+  );
+
+  if (response.statusCode == 200) {
+    final token = json.decode(response.body)['token'];
+    await storage.write(key: 'jwt_token', value: token);
+  } else {
+    throw Exception('Failed to login');
+  }
+}
+
+Future<Map<String, String>> getHeaders() async {
+  final token = await storage.read(key: 'jwt_token');
+  return {
+    'Authorization': 'Bearer $token',
+  };
+}
+```
+
+Fetching Cars
+Use the token to make authenticated requests to the backend:
+
+```dart
+Future<List<Car>> fetchCars() async {
+  final headers = await getHeaders();
+  final response = await http.get(
+    Uri.parse('https://your-api.com/api/cars'),
+    headers: headers,
+  );
+
+  if (response.statusCode == 200) {
+    // Parse response
+  } else {
+    throw Exception('Failed to load cars');
+  }
+}
+```
+
+5. Real-Time Notifications with Pusher
+Initialize Pusher
+
+```dart
+import 'package:pusher_client/pusher_client.dart';
+
+final pusher = PusherClient(
+  "YOUR_PUSHER_APP_KEY",
+  PusherOptions(
+    cluster: "YOUR_PUSHER_APP_CLUSTER",
+    auth: PusherAuth(
+      'https://your-api.com/api/v1/broadcasting/auth',
+      headers: {'Authorization': 'Bearer YOUR_JWT_TOKEN'},
+    ),
+  ),
+);
+
+void initPusher() {
+  pusher.connect();
+  Channel channel = pusher.subscribe('cars');
+
+  channel.bind('car.updated', (event) {
+    print("Car updated: ${event.data}");
+  });
+}
+```
+
+#Running the Application
+Backend
+Run the Laravel server:
+```bash 
+php artisan serve
+```
+
+Run WebSocket server if needed:
+```bash 
+php artisan websockets:serve
+```
+
+Frontend
+Run the Flutter app:
+```bash
+flutter run
+```
+
+
+
