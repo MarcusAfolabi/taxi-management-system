@@ -44,8 +44,8 @@ This project is a full-stack application built with Laravel and Flutter that imp
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/car-management-system.git
-cd car-management-system/backend
+git clone https://github.com/MarcusAfolabi/taxi-management-system
+cd taxi-management-system/backend
 ```
 ### 2. Install Dependencies
 ```bash 
