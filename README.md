@@ -47,12 +47,12 @@ This project is a full-stack application built with Laravel and Flutter that imp
 git clone https://github.com/your-username/car-management-system.git
 cd car-management-system/backend
 ```
-2. Install Dependencies
+### 2. Install Dependencies
 ```bash 
 composer install
 npm install
 ```
-3. Environment Configuration
+### 3. Environment Configuration
 Copy .env.example to .env and update your database, Pusher, and JWT settings:
 ```bash
 cp .env.example .env
@@ -71,18 +71,18 @@ PUSHER_APP_CLUSTER=your_pusher_app_cluster
 
 JWT_SECRET=your_jwt_secret
 ```
-4. Generate Keys and Run Migrations
+### 4. Generate Keys and Run Migrations
 ```bash
 php artisan key:generate
 php artisan jwt:secret
 php artisan migrate
 ```
-5. Start Laravel Server
+### 5. Start Laravel Server
 ```bash
 php artisan serve
 ```
 
-6. Setting Up WebSocket with Pusher
+### 6. Setting Up WebSocket with Pusher
 In config/broadcasting.php, set the default broadcast driver to Pusher:
 
 ```php
@@ -109,20 +109,20 @@ npm run dev
 ```
 
 
-Frontend (Flutter) Setup
-1. Navigate to Flutter Project Directory
+### Frontend (Flutter) Setup
+# 1. Navigate to Flutter Project Directory
 
 ```bash
 cd ../frontend
 ```
 
-2. Install Flutter Dependencies
+# 2. Install Flutter Dependencies
 Run the following command to install required packages:
 
 ```bash
 flutter pub get
 ```
-3. Secure Storage and HTTP Setup
+# 3. Secure Storage and HTTP Setup
 Install flutter_secure_storage for storing JWT tokens and http for API requests in your pubspec.yaml:
 
 ```yaml
@@ -131,7 +131,7 @@ dependencies:
   http: ^0.13.3
   pusher_client: ^1.2.0
 ```
-4. API Communication with JWT
+# 4. API Communication with JWT
 Login and Fetch JWT Token
 Add a login function to store the JWT token securely:
 
@@ -163,7 +163,7 @@ Future<Map<String, String>> getHeaders() async {
 }
 ```
 
-Fetching Cars
+# Fetching Cars
 Use the token to make authenticated requests to the backend:
 
 ```dart
@@ -182,7 +182,7 @@ Future<List<Car>> fetchCars() async {
 }
 ```
 
-5. Real-Time Notifications with Pusher
+### 5. Real-Time Notifications with Pusher
 Initialize Pusher
 
 ```dart
@@ -216,16 +216,13 @@ Run the Laravel server:
 php artisan serve
 ```
 
-Run WebSocket server if needed:
+# Run WebSocket server if needed:
 ```bash 
 php artisan websockets:serve
 ```
 
-Frontend
+## Frontend
 Run the Flutter app:
 ```bash
 flutter run
 ```
-
-
-
